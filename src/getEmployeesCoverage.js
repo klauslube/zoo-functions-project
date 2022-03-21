@@ -43,7 +43,7 @@ function getEmployeesCoverage(objParameter) {
     const emploName = objResult.find((employee) => employee.fullName.match(objParameter.name));// achar jeito de comparar exatamente
     verify(emploName);
     return emploName;
-  } 
+  }
 }
 
 console.log(getEmployeesCoverage({ name: '' }));
