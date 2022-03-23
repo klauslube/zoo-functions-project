@@ -12,53 +12,32 @@ function getAnimals() {
 }
 
 function getNames(options) {
-  if (options.includeNames) {
-    const obj = species.reduce((acc, specie) => {
-      if (!acc[specie.location]) acc[specie.location] = [];
-      const animalsName = specie.residents.map((animal) => animal.name);
-      // console.log(animalsName);
-      acc[specie.location].push({ [specie.name]: animalsName });
-      // if (options.sex) {
-
-      // }
-      // console.log(acc);
-      return acc;
-    }, {});
-    return obj;
-  }
+  const obj = species.reduce((acc, specie) => {
+    if (!acc[specie.location]) acc[specie.location] = [];
+    const animalsName = specie.residents.map((animal) => animal.name);
+    acc[specie.location].push({ [specie.name]: options.sorted ? animalsName.sort() : animalsName });
+    return acc;
+  }, {});
+  console.log(obj);
+  return obj;
 }
 
-// function popAnimals(options) {
-//   const animalsName = species.residents.map((animal) => animal.name);
-//   const getSex = species.reduce((acc, specie) => {
-//     if (!acc[specie.location]) acc[specie.location] = [];
-//     const animals = species.residents.filter((animal) => animal.sex === options.sex);
-//   }, {});
-// }
-
-function getSortNames(options) {
-  if (options.sorted) {
-    const obj = species.reduce((acc, specie) => {
-      if (!acc[specie.location]) acc[specie.location] = [];
-      const animalsName = specie.residents.map((animal) => animal.name).sort();
-      // animalsName.sort();
-      acc[specie.location].push({ [specie.name]: animalsName });
-      // console.log(animalsName);
-      return acc;
-    }, {});
-    // console.log(obj);
-    return obj;
-  }
+function getSex(options) {
+  const Sex = species.reduce((acc, specie) => {
+    if (!acc[specie.location]) acc[specie.location] = [];
+    const animal = specie.residents.filter((ani) => ani.sex === options.sex).map((ani) => ani.name);
+    acc[specie.location].push({ [specie.name]: options.sorted ? animal.sort() : animal });
+    return acc;
+  }, {});
+  return Sex;
 }
 
 function getAnimalMap(options) {
-  if (!options || options.sex) return getAnimals();
-  // if (options.includeNames) return getNames(options);
+  if (!options || !options.includeNames) return getAnimals();
   if (options.includeNames) {
-    return getSortNames(options) ? getSortNames(options) : getNames(options);
+    if (options.sex) return getSex(options);
+    return getNames(options);
   }
 }
-// console.log(JSON.stringify(getSortNames({ includeNames: true, sorted: true }), undefined, 2));
-console.log(getNames({ includeNames: true, sex: 'male' }));
 
 module.exports = getAnimalMap;
